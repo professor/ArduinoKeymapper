@@ -20,6 +20,7 @@
 * The code is released under the GNU General Public License.
 */
 
+const boolean debug = false;
 
 /*
 * If using the Arduino Due, you will need the following include:
@@ -47,63 +48,54 @@
 #define UHS_HID_BOOT_KEY_TAB        0x2B
 #define UHS_HID_BOOT_KEY_CAPS       0x39
 
+// variable definitions
+typedef enum 
+{
+    qwerty=0, 
+    tarmak1,
+    tarmak2,
+    tarmak3,
+    tarmak4,
+    colemak,
+    dvorak,
+    workman
+} KeyboardLayout;
 
-const boolean debug = true;
+// Keymap based on the scancodes from 4 to 57, refer to the HID usage table on the meaning of each element
+PROGMEM prog_uint8_t qwertyKeymap[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57};
+PROGMEM prog_uint8_t tarmak1Keymap[] = {4, 5, 6, 7, 13, 9, 10, 11, 12, 17, 8, 15, 16, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 42};
+//PROGMEM prog_uint8_t tarmak2Keymap[] = {4, 5, 6, 7, 9, 23, 13, 11, 12, 17, 8, 15, 16, 14, 18, 19, 20, 21, 22, 10, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 42};
+PROGMEM prog_uint8_t tarmak2Keymap[] = {4, 5, 6, 7, 9, 23, 13, 11, 12, 17, 8, 15, 16, 14, 18, 19, 20, 21, 22, 10, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 42};
+
+PROGMEM prog_uint8_t tarmak3Keymap[] = {4, 5, 6, 7, 9, 23, 51, 11, 12, 17, 8, 15, 16, 14, 28, 19, 20, 21, 22, 10, 24, 25, 26, 27, 13, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 18, 52, 53, 54, 55, 56, 42};
+PROGMEM prog_uint8_t tarmak4Keymap[] = {4, 5, 6, 7, 9, 23, 51, 11, 24, 17, 8, 12, 16, 14, 28, 19, 20, 21, 22, 10, 15, 25, 26, 27, 13, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 18, 52, 53, 54, 55, 56, 42};
+PROGMEM prog_uint8_t colemakKeymap[] = {4, 5, 6, 22, 9, 23, 7, 11, 24, 17, 8, 12, 16, 14, 28, 51, 20, 19, 21, 10, 15, 25, 26, 27, 13, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 18, 52, 53, 54, 55, 56, 42};
+PROGMEM prog_uint8_t dvorakKeymap[] = {4, 27, 13, 8, 55, 24, 12, 7, 6, 11, 23, 17, 16, 5, 21, 15, 52, 19, 18, 28, 10, 14, 54, 20, 9, 51, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 47, 48, 56, 46, 49, 50, 22, 45, 53, 26, 25, 29, 57};
+PROGMEM prog_uint8_t workmanKeymap[] = {4, 25, 16, 11, 21, 23, 10, 28, 24, 17, 8, 18, 15, 14, 19, 51, 20, 26, 22, 5, 9, 6, 7, 27, 13, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 12, 52, 53, 54, 55, 56, 42};
+
+const uint8_t *Keymap[] =
+{   
+    qwertyKeymap,
+    tarmak1Keymap,
+    tarmak2Keymap,
+    tarmak3Keymap,
+    tarmak4Keymap,
+    colemakKeymap,
+    dvorakKeymap,
+    workmanKeymap
+};
+
+KeyboardLayout CurrentLayout = tarmak2;
+
 boolean keyboardInitialized = false;
-boolean mouseInitialized = false;
 void pressKey(uint8_t key);
 void releaseKey(uint8_t key);
-void moveMouse(signed char x, signed char y);
-void mousePress(char button);
-void mouseRelease(char button);
 
 // Keep track of press/release events for every key.
 uint8_t keyPressCount[256];
 
 const uint8_t modifier_keys[] = {KEY_LEFT_CTRL, KEY_LEFT_SHIFT, KEY_LEFT_ALT, KEY_LEFT_GUI,
         KEY_RIGHT_CTRL, KEY_RIGHT_SHIFT, KEY_RIGHT_ALT, KEY_RIGHT_GUI};
-
-class MouseRptParser : public MouseReportParser
-{
-protected:
-	virtual void OnMouseMove	(MOUSEINFO *mi);
-	virtual void OnLeftButtonUp	(MOUSEINFO *mi);
-	virtual void OnLeftButtonDown	(MOUSEINFO *mi);
-	virtual void OnRightButtonUp	(MOUSEINFO *mi);
-	virtual void OnRightButtonDown	(MOUSEINFO *mi);
-	virtual void OnMiddleButtonUp	(MOUSEINFO *mi);
-	virtual void OnMiddleButtonDown	(MOUSEINFO *mi);
-};
-
-void MouseRptParser::OnMouseMove(MOUSEINFO *mi)
-{
-    moveMouse(mi->dX, mi->dY);
-};
-void MouseRptParser::OnLeftButtonUp	(MOUSEINFO *mi)
-{
-    mouseRelease(MOUSE_LEFT);
-};
-void MouseRptParser::OnLeftButtonDown	(MOUSEINFO *mi)
-{
-    mousePress(MOUSE_LEFT);
-};
-void MouseRptParser::OnRightButtonUp	(MOUSEINFO *mi)
-{
-    mouseRelease(MOUSE_RIGHT);
-};
-void MouseRptParser::OnRightButtonDown	(MOUSEINFO *mi)
-{
-    mousePress(MOUSE_RIGHT);
-};
-void MouseRptParser::OnMiddleButtonUp	(MOUSEINFO *mi)
-{
-    mouseRelease(MOUSE_MIDDLE);
-};
-void MouseRptParser::OnMiddleButtonDown	(MOUSEINFO *mi)
-{
-    mousePress(MOUSE_MIDDLE);
-};
-
 
 class KbdRptParser : public KeyboardReportParser
 {
@@ -122,7 +114,8 @@ protected:
 uint8_t KbdRptParser::mapToAscii(uint8_t key) {
         // [a-z]
         if (VALUE_WITHIN(key, 0x04, 0x1d)) {
-                return (key - 4 + 'a');
+                return pgm_read_byte(Keymap[CurrentLayout] + key - 4) + 'a' - 4;
+//                return (key - 4 + 'a');
         }// Numbers
         else if (VALUE_WITHIN(key, 0x1e, 0x27)) {
                  return ((key == UHS_HID_BOOT_KEY_ZERO) ? '0' : key - 0x1e + '1');
@@ -231,49 +224,6 @@ void KbdRptParser::OnKeyUp(uint8_t mod, uint8_t key)
     }
 }
 
-void ensureMouseInitialized() {
-    if (!mouseInitialized) {
-        mouseInitialized = true;
-        if (debug) {
-          Serial.println("Initializing mouse");
-        } else {
-            Mouse.begin();
-        }
-    }
-}
-
-void moveMouse(int8_t x, int8_t y) {
-    ensureMouseInitialized();
-    if (debug) {
-        Serial.print("dx=");
-        Serial.print(x, DEC);
-        Serial.print(" dy=");
-        Serial.println(y, DEC);
-    } else {
-        Mouse.move(x, y, 0);
-    }
-}
-void mousePress(char button) {
-    ensureMouseInitialized();
-    if (debug) {
-        Serial.print("mouse button pressed: ");
-        Serial.println(button, DEC);
-    } else {
-        Mouse.press(button);
-    }
-}
-
-void mouseRelease(char button) {
-    ensureMouseInitialized();
-    if (debug) {
-        Serial.print("mouse button released: ");
-        Serial.println(button, DEC);
-    } else {
-        Mouse.release(button);
-    }
-}
-
-
 void pressKey(uint8_t key)
 {
     if (!keyboardInitialized) {
@@ -324,14 +274,11 @@ USBHub     hub7(&usb);
 HIDBoot<HID_PROTOCOL_KEYBOARD>    hidKeyboard1(&usb);
 HIDBoot<HID_PROTOCOL_KEYBOARD>    hidKeyboard2(&usb);
 HIDBoot<HID_PROTOCOL_KEYBOARD>    hidKeyboard3(&usb);
-// HIDBoot<HID_PROTOCOL_MOUSE>       hidMouse(&usb);
 
 // KbdRptParser compositeKeyboardReportParser1;
-// MouseRptParser compositeMouseReportParser1;
 KbdRptParser keyboardReportParser1;
 KbdRptParser keyboardReportParser2;
 KbdRptParser keyboardReportParser3;
-// MouseRptParser mouseParser;
 
 void setup()
 {
@@ -355,7 +302,6 @@ void setup()
     hidKeyboard1.SetReportParser(0, (HIDReportParser*)&keyboardReportParser1);
     hidKeyboard2.SetReportParser(0, (HIDReportParser*)&keyboardReportParser2);
     hidKeyboard3.SetReportParser(0, (HIDReportParser*)&keyboardReportParser3);
-//    hidMouse.SetReportParser(0, (HIDReportParser*)&mouseParser);
 }
 
 void loop()
