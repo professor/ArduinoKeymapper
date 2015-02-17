@@ -1,4 +1,4 @@
-ArdunioKeymapper for Dvorak, Colmac, Tarmak, and Workman
+Ardunio Keymapper for Dvorak, Colmac, Tarmak, and Workman
 =============================
 
 This converts keys typed in a particular keyboard layout into QWERTY.
@@ -10,7 +10,7 @@ Currently the code supports
  - Tarmak 3 to Qwerty
  - Tarmak 4 to Qwerty
  - Dvorak to Qwery
- - Woreman to Qwerty
+ - Workman to Qwerty
 
 This code base is known to work with Apple Keyboards. If you are interested in a software keymapper, check out https://github.com/shelbyd/tarmak
 
@@ -44,7 +44,7 @@ All you need to purchase is:
 
 - One Circuits At Home USB Host Shield 2 (Assembled): http://www.circuitsathome.com/products-page/arduino-shields
 
-![USB Host Shield](hhttps://raw.githubusercontent.com/professor/ArduinoKeymapper/master/UsbHostShield.JPG)
+![USB Host Shield](https://raw.githubusercontent.com/professor/ArduinoKeymapper/master/UsbHostShield.JPG)
 
 - One Micro B USB cable (unfortunately they don't normally come with the Arduino).
 
@@ -124,6 +124,6 @@ Alternatively, you could try using a powered USB hub either:
 Please report issues and submit and enhancement suggestions here https://github.com/professor/ArduinoKeymapper/issues
 
 
-# Using Foot Pedals for Shift, Alt, Command, and Control on a Mac
+## Using Foot Pedals for Shift, Alt, Command, and Control on a Mac
 
 Please read the details here: https://github.com/davidbkemp/KeyboardCombinerArduinoSketch/blob/master/Instructions.md
