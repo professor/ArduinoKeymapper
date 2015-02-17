@@ -40,15 +40,15 @@ All you need to purchase is:
 
 - One Arduino Leonardo (with headers): http://arduino.cc/en/Main/ArduinoBoardLeonardo (available on amazon.com)
 
-![Arduino Leonardo](http://professor.github.io/ArduinoKeymapper/blob/master/Leonardo.JPG)
+![Arduino Leonardo](https://raw.githubusercontent.com/professor/ArduinoKeymapper/master/Leonardo.JPG)
 
 - One Circuits At Home USB Host Shield 2 (Assembled): http://www.circuitsathome.com/products-page/arduino-shields
 
-![USB Host Shield](http://professor.github.io/ArduinoKeymapper/blob/master/UsbHostShield.JPG)
+![USB Host Shield](hhttps://raw.githubusercontent.com/professor/ArduinoKeymapper/master/UsbHostShield.JPG)
 
 - One Micro B USB cable (unfortunately they don't normally come with the Arduino).
 
-![Micro B USB Cable](http://professor.github.io/ArduinoKeymapper/blob/master/Cable.JPG)
+![Micro B USB Cable](https://raw.githubusercontent.com/professor/ArduinoKeymapper/master/Cable.JPG)
 
 Make sure you purchase a Leonardo model Arduino. Currently, only the Leonardo, the Due, and the Micro can act as USB clients.  The Due is bigger and more expensive than the Leonardo, and the makers of the USB shield do not guarantee that the shield will work with the Due without some fiddly modifications.  The Micro is smaller, and I have no idea if it will work with any of the Circuits At Home USB shields.
 
@@ -61,7 +61,7 @@ Two more warnings. Unless you actually enjoy soldering stuff:
 
 The fully assembled USB Host Shield has metal pins that plug straight into the "headers" of the Arduino.  It is fairly obvious which way around the shield needs to be oriented relative to the Arduino. You should find that they plug together quite snugly to the point where none of the pins are exposed.  Take care not to bend the pins, especially if/when you ever pull them apart again.
 
-![USB Shield plugged into the Leonardo](http://professor.github.io/ArduinoKeymapper/blob/master/CombinedLeonardoPlusUsbShield.JPG)
+![USB Shield plugged into the Leonardo](https://raw.githubusercontent.com/professor/ArduinoKeymapper/master/CombinedLeonardoPlusUsbShield.JPG)
 
 ## The Software
 The Arduino cannot do anything until some software has been uploaded onto it.  You only need to do this once. From then on, you can use your keyboard combiner on any Apple computer without installing or configuring anything on that computer. 
@@ -81,7 +81,7 @@ Once you are ready (or found a geek friend to give you a hand):
 - Upload the keymapper code:
 
  - Open a new sketch window in the Arduino IDE: "File -> New" 
- - Paste the contents of KeyboardCombiner.ino into this sketch window (replacing what is already there if anything): https://raw.githubusercontent.com/professor/ArduinoKeymapper/blob/master/KeyboardCombiner.ino
+ - Paste the contents of ArduinoKeymapper.ino into this sketch window (replacing what is already there if anything): https://raw.githubusercontent.com/professor/ArduinoKeymapper/master/ArduinoKeymapper.ino
  - Select the correct Arduino board: "Tools -> Board -> Arduino Leonardo"
  - Modify CurrentLayout to be the correct layout, e.g.
    - KeyboardLayout CurrentLayout = tarmak2;
